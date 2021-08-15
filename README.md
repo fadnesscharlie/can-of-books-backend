@@ -24,13 +24,25 @@ UML for Lab 11
 ## Credit and Collaborations
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
 - Willem Jacobs
+- [Auth0 Docs](https://auth0.com/docs)
+- Ryan Galloway
 
 ## Name of feature: Starting with Auth0
 
 Estimate of time needed to complete: 4 hours
 
-Start time: 2:15pm
+Start time: 2:15pm 8/14/2021
 
-Finish time: 4:45pm
+Finish time: 4:45pm 8/14/2021
 
 Actual time needed to complete: 2 hours and 30 minutes
+
+## Name of feature:
+
+Estimate of time needed to complete: 
+
+Start time:
+
+Finish time:
+
+Actual time needed to complete:
