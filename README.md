@@ -23,8 +23,8 @@ UML for Lab 11
 
 ## Credit and Collaborations
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
-- Willem Jacobs
 - [Auth0 Docs](https://auth0.com/docs)
+- Willem Jacobs
 - Ryan Galloway
 
 ## Name of feature: Starting with Auth0
