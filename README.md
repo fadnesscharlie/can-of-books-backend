@@ -37,12 +37,12 @@ Finish time: 4:45pm 8/14/2021
 
 Actual time needed to complete: 2 hours and 30 minutes
 
-## Name of feature:
+## Name of feature: Mongo
 
-Estimate of time needed to complete: 
+Estimate of time needed to complete: 4 hours
 
-Start time:
+Start time: 8/17/2021 8:30pm
 
-Finish time:
+Finish time: 8/18/2021 9:30pm
 
-Actual time needed to complete:
+Actual time needed to complete: 4 hours
