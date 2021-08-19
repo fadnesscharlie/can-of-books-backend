@@ -21,8 +21,8 @@ var client = jwksClient({
   jwksUri: 'https://dev-t7-jvcng.us.auth0.com/.well-known/jwks.json'
 });
 
-function getKey(header, callback){
-  client.getSigningKey(header.kid, function(err, key) {
+function getKey(header, callback) {
+  client.getSigningKey(header.kid, function (err, key) {
     var signingKey = key.publicKey || key.rsaPublicKey;
     callback(null, signingKey);
   });
@@ -33,7 +33,11 @@ app.get('/', (req, res) => {
   res.send('Hello World');
 });
 
-// app.get('/clear', clear);
+// Clears the Data Base
+app.get('/clear', clear);
+
+// Adds/Seeds the Database
+app.get('/clear', seed);
 
 app.get('/test', (req, res) => {
 
@@ -42,8 +46,8 @@ app.get('/test', (req, res) => {
 
   // Use the jsonwebtoken library to verify that it is a valid jwt
   // jsonwebtoken dock - https://www.npmjs.com/package/jsonwebtoken
-  jwt.verify(token, getKey, {}, function (err, user){
-    if(err){
+  jwt.verify(token, getKey, {}, function (err, user) {
+    if (err) {
       response.status(500).send('invlaid token');
     }
     res.send(user);
@@ -51,29 +55,69 @@ app.get('/test', (req, res) => {
 
 })
 
-app.get('/books', async (req, res) => {
+app.get('/books',(req, res) => {
   try {
+    // Using split takes out the word bearer from the front end
+    const token = req.headers.authorization.split(' ')[1];
+    // // Use the jsonwebtoken library to verify that it is a valid jwt
+    // // jsonwebtoken dock - https://www.npmjs.com/package/jsonwebtoken
+    jwt.verify(token, getKey, {}, function (err, user) {
+      if (err) {
+        res.status(500).send('invlaid token');
+      }
+      BookModel.find((err, bookdb) => {
+        res.status(200).send(bookdb);
+      });
+    });
     // C READ U D
-    let booksdb = await BookModel.find({});
-    res.status(200).send(booksdb);
   } catch (err) {
     res.status(500).send('dbase error');
   }
 })
 
-// start the db
-// terminal idAddress = ... Port 27017
 // conntect to the db                    Name of DB-not related to books path
-mongoose.connect('mongodb://127.0.0.1:27017/books',{
+mongoose.connect('mongodb://127.0.0.1:27017/books', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-// .then makes it connect to the DB first 
-// Does not need to be in this promise
-.then( async () => {
-  try {
-  console.log('connected to the database');
+  // .then makes it connect to the DB first 
+  //     Does not need to be in this promise
+  .then(async () => {
+    try {
+      console.log('connected to the database');
+      // storing a new book single
+      let newBook = new BookModel({
+        title: "Tobin's Spirit Guide",
+        description: "H Thomas Tobin",
+        status: "Status",
+        email: "email",
+      })
+      await newBook.save();
+    } catch (error) {
+      console.log('error in mongoose connect', error)
+    }
+  });
 
+// Function to add book to DB
+async function addBook(obj) {
+  // CREATE R U D
+  // {title: "", description: "", status: "", email: ""}
+  let newBook = new BookModel(obj);
+  return await newBook.save();
+}
+
+// function to clear our DB
+async function clear(req, res) {
+  // C R U DELETE
+  try {
+    await BookModel.deleteMany({});
+    res.status(200).send('Cleared the Database');
+  } catch (err) {
+    res.status(500).send('Error in clearing the Database');
+  }
+}
+
+async function seed(req, res) {
   // Seeded Data
   let books = await BookModel.find({});
   if (books.length === 0) {
@@ -96,45 +140,8 @@ mongoose.connect('mongodb://127.0.0.1:27017/books',{
       email: "email",
     })
   }
-
-  // storing a new book single
-  let newBook = new BookModel({
-    title: "Tobin's Spirit Guide",
-    description: "H Thomas Tobin",
-    status: "Status",
-    email: "email",
-  })
-
-  await newBook.save();
-  } catch (error) {
-  console.log('error in mongoose connect', error)
-  }
-
-  app.listen(3007, () => {
-    console.log('Server up on 3001????????');
-  });
-});
-
-
-// Function to add book to DB
-async function addBook(obj){
-  // CREATE R U D
-  // {title: "", author ""}
-  let newBook = new BookModel(obj);
-  return await newBook.save();
+  res.send('Seeded the Database');
 }
-
-// function to clear our DB
-async function clear(){
-  // C R U DELETE
-  try {
-    await BookModel.deleteMany({});
-    console.log('Cleared the whole DB!!!');
-  } catch (err) {
-    console.log('Error in clearing the DB!');
-  }
-}
-
 
 // listen to port
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
