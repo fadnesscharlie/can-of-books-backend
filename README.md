@@ -25,7 +25,7 @@ UML for Lab 11
 <!-- Give credit (and a link) to other people or resources that helped you build this application. -->
 - [Auth0 Docs](https://auth0.com/docs)
 - Willem Jacobs
-- Ryan Galloway
+- Ryan Galloway - Demo Code
 
 ## Name of feature: Starting with Auth0
 
@@ -55,4 +55,4 @@ Start time: _____
 
 Finish time: _____
 
-Actual time needed to complete: _____
+Actual time needed to complete: _____ 
