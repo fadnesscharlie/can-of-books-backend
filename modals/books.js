@@ -11,7 +11,7 @@ const bookSchema = new mongoose.Schema({
   email: {type: String},
 });
 
-// Create a model                file?    our model
+// Create a model      'books': file/collection?    our model
 const BookModel = mongoose.model('books', bookSchema);
 
 
