@@ -4,7 +4,10 @@
 **Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
-<!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
+
+Our overview in our Can of Books is having a user be able to store their favorite books. The user will be able to view, add, update, and delete their books as needed.
+
+The user must be logged in through Auth0, and will only show the books that are linked to the users email.
 
 ## Getting Started
 <!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
@@ -15,6 +18,10 @@
 UML for Lab 11
 
 <img src="img/wml for lab 11.png">
+
+UML for Lab 13
+
+<img src="img/ULM-for-Auth0-and-Mongo.png">
 
 ## Change Log
 <!-- Use this area to document the iterative changes made to your application as each feature is successfully implemented. Use time stamps. Here's an example:
@@ -47,12 +54,12 @@ Finish time: 8/18/2021 9:30pm
 
 Actual time needed to complete: 4 hours
 
-## Name of feature: ________________________________
+## Name of feature: Mongo, Auth0, Add, Delete
 
-Estimate of time needed to complete: _____
+Estimate of time needed to complete: 6 hours
 
-Start time: _____
+Start time: 2:30pm 8/21/2021
 
-Finish time: _____
+Finish time: 5:30pm 8/22/2021
 
-Actual time needed to complete: _____ 
+Actual time needed to complete: 5.5 hours 

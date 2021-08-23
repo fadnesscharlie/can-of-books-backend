@@ -37,7 +37,7 @@ db.once('open', function () {
   console.log('Mongoose is connected');
 });
 
-// conntect to the db                    Name of DB-not related to books path
+// conntect to the db               Name of DB-not related to books path
 mongoose.connect('mongodb://127.0.0.1:27017/books', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -92,7 +92,9 @@ app.get('/books', (req, res) => {
   try {
     // Using split takes out the word bearer from the front end
     const token = req.headers.authorization.split(' ')[1];
-    // console.log('token',token)
+
+    // Using the email from the user in the front end, setting email along with requested books
+    const email = req.query.email;
 
     // // Use the jsonwebtoken library to verify that it is a valid jwt
     // // jsonwebtoken dock - https://www.npmjs.com/package/jsonwebtoken
@@ -102,17 +104,23 @@ app.get('/books', (req, res) => {
       }
       // looking into our collection and finding all of our books
       // refers to the collection created by our schema
-      BookModel.find((err, bookdb) => {
+      BookModel.find( {email}, (err, bookdb) => {
+        // You can use the error to make a error handle
         res.status(200).send(bookdb);
       });
     });
-    // C READ U D
   } catch (err) {
     res.status(500).send('dbase error');
   }
 })
 
 app.post('/post-books', (req, res) => {
+
+  // ##################
+  // Token for Post Route. Needs to update to front end as well to work
+  // Does not work if just commented in. Not sure if needed.
+  // ##################
+
   // const token = req.headers.authorization.split(' ')[1];
   // jwt.verify(token, getKey, {}, function (err, user) {
   //   if (err) {
@@ -120,17 +128,18 @@ app.post('/post-books', (req, res) => {
   //   }
   //   // looking into our collection and finding all of our books
   //   // refers to the collection created by our schema
-  //   BookModel.find((err, bookdb) => {
-  //     res.status(200).send(bookdb);
-  //   });
+    
+  //   let { title, description, status, email } = req.body;
+      
+  //   let newBook = new BookModel({ title, description, status, email });
+  //   // Saves to the Database
+  //   newBook.save();
+  //   res.send('Sucessfully Posted');
   // });
 
-  // ###########################
-  // Wrap this in auth like above
-  // ###########################
-
   let { title, description, status, email } = req.body;
-    
+
+  // Creating a new book for us using the data from the body
   let newBook = new BookModel({ title, description, status, email });
   // Saves to the Database
   newBook.save();
@@ -151,7 +160,7 @@ app.delete('/delete-books/:id', async (req, res) => {
 // Function to add book to DB
 async function addBook(obj) {
   // CREATE R U D
-  // {title: "", description: "", status: "", email: ""}
+  // {title: "", description: "", status: "", email: User's Email}
   let newBook = new BookModel(obj);
   return await newBook.save();
 }
@@ -178,6 +187,7 @@ async function seed(req, res) {
       status: "status1",
       email: "email1",
     })
+    // Create a new book, but needs to be saved
     const newWayOfAddingBook = new BookModel({
       title: "New Book2",
       description: "Awesome Author2",
@@ -185,6 +195,7 @@ async function seed(req, res) {
       email: "email2",
     })
     newWayOfAddingBook.save();
+    // Creates and saves the new book for you
     BookModel.create({
       title: "New Book3",
       description: "Awesome Author3",
