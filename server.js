@@ -58,7 +58,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/books', {
     } catch (error) {
       console.log('error in mongoose connect', error)
     }
-});
+  });
 
 // ####################  Routes  ##############################
 
@@ -92,6 +92,7 @@ app.get('/books', (req, res) => {
   try {
     // Using split takes out the word bearer from the front end
     const token = req.headers.authorization.split(' ')[1];
+    // console.log(token);
 
     // Using the email from the user in the front end, setting email along with requested books
     const email = req.query.email;
@@ -104,7 +105,10 @@ app.get('/books', (req, res) => {
       }
       // looking into our collection and finding all of our books
       // refers to the collection created by our schema
-      BookModel.find( {email}, (err, bookdb) => {
+
+      BookModel.find({ email }, (err, bookdb) => {
+      // BookModel.find((err, bookdb) => {
+        // console.log('bookdb',bookdb)
         // You can use the error to make a error handle
         res.status(200).send(bookdb);
       });
@@ -128,9 +132,9 @@ app.post('/post-books', (req, res) => {
   //   }
   //   // looking into our collection and finding all of our books
   //   // refers to the collection created by our schema
-    
+
   //   let { title, description, status, email } = req.body;
-      
+
   //   let newBook = new BookModel({ title, description, status, email });
   //   // Saves to the Database
   //   newBook.save();
@@ -154,6 +158,58 @@ app.delete('/delete-books/:id', async (req, res) => {
   // await CatModel.findByIdAndDelete(myId, auth information/callback);
   res.send(`Sucessfully Deleted: ${myId}`);
 });
+
+// Handle Update Request
+app.put('/update-books/:id', async (req, res) => {
+
+  try {
+    let myId = req.params.id;
+    console.log('myId', myId);
+    let { title, description, status, email } = req.body;
+    console.log('req.body',req.body)
+    const updatedCat = await BookModel.findByIdAndUpdate(
+      myId,
+
+// ############################################################################################################
+// User email printed here manually for testing
+// ############################################################################################################
+
+      { title, description, status, email: "boy_916@hotmail.com" },
+      { new: true, overwrite: true }
+    );
+
+    res.status(200).send(updatedCat);
+  } catch (error) {
+    res.status(500).send('Update Error')
+  }
+});
+
+
+// app.delete('/delete-books/:id', (req, res) => {
+
+//   const token = req.headers.authorization.split(' ')[1];
+//   jwt.verify(token, getKey, {}, function (err, user) {
+//     if (err) {
+//       res.status(500).send('invlaid token');
+//     } else {
+
+//       // Grabbing it from email query from frontend
+//       let email = req.query.email;
+//       console.log('email: ', email)
+
+//       let myId = req.params.id;
+//       let requestedBook = BookModel.find({myId})
+//       if (email === user.email){
+
+//         BookModel.findByIdAndDelete(myId);
+//         console.log('myId', myId);
+//         res.status(200).send(`Sucessfully Deleted: ${requestedBook.title}`);
+//       }
+
+//       // await CatModel.findByIdAndDelete(myId, auth information/callback);
+//     }
+//   })
+// });
 
 // ####################  Functions  ##############################
 
@@ -185,14 +241,14 @@ async function seed(req, res) {
       title: "New Book1",
       description: "Awesome Author1",
       status: "status1",
-      email: "email1",
+      email: "boy_916@hotmail.com",
     })
     // Create a new book, but needs to be saved
     const newWayOfAddingBook = new BookModel({
       title: "New Book2",
       description: "Awesome Author2",
       status: "status2",
-      email: "email2",
+      email: "boy_916@hotmail.com",
     })
     newWayOfAddingBook.save();
     // Creates and saves the new book for you
@@ -200,25 +256,13 @@ async function seed(req, res) {
       title: "New Book3",
       description: "Awesome Author3",
       status: "status3",
-      email: "email3",
+      email: "boy_916@hotmail.com",
     })
   }
-  res.send('Seeded the Database');
+  res.status(200).send('Seeded the Database');
 }
 
-// ####################  Functions  ##############################
-
-
-
-
-
-
-
-
-
-
-
-
+// ####################  END  ##############################
 
 // listen to port
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
