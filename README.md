@@ -63,3 +63,13 @@ Start time: 2:30pm 8/21/2021
 Finish time: 5:30pm 8/22/2021
 
 Actual time needed to complete: 5.5 hours 
+
+## Name of feature: Put
+
+Estimate of time needed to complete: 6 hours
+
+Start time: 8:30pm 8/24/2021
+
+Finish time: 10:30pm 8/25/2021
+
+Actual time needed to complete: 4 hours 
