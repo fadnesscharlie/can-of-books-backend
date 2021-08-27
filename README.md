@@ -12,6 +12,12 @@ The user must be logged in through Auth0, and will only show the books that are 
 ## Getting Started
 <!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
 
+Clone the Repo
+
+Install all the correct packages with `npm i`
+
+
+
 ## Architecture
 <!-- Provide a detailed description of the application design. What technologies (languages, libraries, etc) you're using, and any other relevant design information. -->
 

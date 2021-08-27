@@ -9,7 +9,8 @@ const BookModel = require('./modals/books.js');
 
 const app = express();
 app.use(cors());
-// in roder to acces the request body, we must use express.json();
+
+// in order to acces the request body, we must use express.json();
 app.use(express.json());
 
 const PORT = process.env.PORT || 3001;
@@ -72,27 +73,10 @@ app.get('/clear', clear);
 // Adds/Seeds the Database
 app.get('/seed', seed);
 
-app.get('/test', (req, res) => {
-
-  // Using split takes out the word bearer from the front end
-  const token = req.headers.authorization.split(' ')[1];
-
-  // Use the jsonwebtoken library to verify that it is a valid jwt
-  // jsonwebtoken dock - https://www.npmjs.com/package/jsonwebtoken
-  jwt.verify(token, getKey, {}, function (err, user) {
-    if (err) {
-      response.status(500).send('invlaid token');
-    }
-    res.send(user);
-  });
-
-})
-
 app.get('/books', (req, res) => {
   try {
     // Using split takes out the word bearer from the front end
     const token = req.headers.authorization.split(' ')[1];
-    // console.log(token);
 
     // Using the email from the user in the front end, setting email along with requested books
     const email = req.query.email;
@@ -107,9 +91,8 @@ app.get('/books', (req, res) => {
       // refers to the collection created by our schema
 
       BookModel.find({ email }, (err, bookdb) => {
-      // BookModel.find((err, bookdb) => {
-        // console.log('bookdb',bookdb)
         // You can use the error to make a error handle
+        // Stretch --
         res.status(200).send(bookdb);
       });
     });
@@ -119,97 +102,45 @@ app.get('/books', (req, res) => {
 })
 
 app.post('/post-books', (req, res) => {
-
-  // ##################
-  // Token for Post Route. Needs to update to front end as well to work
-  // Does not work if just commented in. Not sure if needed.
-  // ##################
-
-  // const token = req.headers.authorization.split(' ')[1];
-  // jwt.verify(token, getKey, {}, function (err, user) {
-  //   if (err) {
-  //     res.status(500).send('invlaid token');
-  //   }
-  //   // looking into our collection and finding all of our books
-  //   // refers to the collection created by our schema
-
-  //   let { title, description, status, email } = req.body;
-
-  //   let newBook = new BookModel({ title, description, status, email });
-  //   // Saves to the Database
-  //   newBook.save();
-  //   res.send('Sucessfully Posted');
-  // });
-
   let { title, description, status, email } = req.body;
 
   // Creating a new book for us using the data from the body
   let newBook = new BookModel({ title, description, status, email });
+  
   // Saves to the Database
   newBook.save();
+
+  // Sends the book to the front end ALONG with the ID
   res.send('Sucessfully Posted');
 })
 
-// handle delete request - wrapping it in auth is VERY GOOD
+// handle delete request
 app.delete('/delete-books/:id', async (req, res) => {
   let myId = req.params.id;
-  console.log('myId', myId);
   await BookModel.findByIdAndDelete(myId);
-  // await CatModel.findByIdAndDelete(myId, auth information/callback);
   res.send(`Sucessfully Deleted: ${myId}`);
 });
 
 // Handle Update Request
 app.put('/update-books/:id', async (req, res) => {
+  // ################################
+  // User email printed here manually for testing
+  // ################################
 
   try {
     let myId = req.params.id;
-    console.log('myId', myId);
     let { title, description, status, email } = req.body;
-    console.log('req.body',req.body)
+    // Update our book with the matching ID, updating our properties we listed
     const updatedCat = await BookModel.findByIdAndUpdate(
       myId,
-
-// ############################################################################################################
-// User email printed here manually for testing
-// ############################################################################################################
-
       { title, description, status, email: "boy_916@hotmail.com" },
       { new: true, overwrite: true }
     );
-
     res.status(200).send(updatedCat);
   } catch (error) {
     res.status(500).send('Update Error')
   }
 });
-
-
-// app.delete('/delete-books/:id', (req, res) => {
-
-//   const token = req.headers.authorization.split(' ')[1];
-//   jwt.verify(token, getKey, {}, function (err, user) {
-//     if (err) {
-//       res.status(500).send('invlaid token');
-//     } else {
-
-//       // Grabbing it from email query from frontend
-//       let email = req.query.email;
-//       console.log('email: ', email)
-
-//       let myId = req.params.id;
-//       let requestedBook = BookModel.find({myId})
-//       if (email === user.email){
-
-//         BookModel.findByIdAndDelete(myId);
-//         console.log('myId', myId);
-//         res.status(200).send(`Sucessfully Deleted: ${requestedBook.title}`);
-//       }
-
-//       // await CatModel.findByIdAndDelete(myId, auth information/callback);
-//     }
-//   })
-// });
 
 // ####################  Functions  ##############################
 
